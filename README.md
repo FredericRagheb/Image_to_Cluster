@@ -83,7 +83,7 @@ Faites preuve de pédagogie et soyez clair dans vos expliquations et processus d
 ## Solution implémentée
 ---------------------------------------------------
 
-### 📁 Structure du projet
+### Structure du projet
 
 ```
 Image_to_Cluster/
@@ -98,7 +98,7 @@ Image_to_Cluster/
     └── requirements.yml    # Dépendances Ansible
 ```
 
-### 🚀 Déploiement rapide (One-liner)
+### Déploiement rapide (One-liner)
 
 ```bash
 make all
@@ -111,7 +111,7 @@ Cette commande exécute automatiquement :
 4. Import de l'image dans K3d
 5. Déploiement sur Kubernetes via Ansible
 
-### 📋 Déploiement étape par étape
+### Déploiement étape par étape
 
 #### 1. Installation des outils
 
@@ -172,7 +172,7 @@ L'application est accessible sur `http://localhost:8080`.
 
 Dans GitHub Codespace, ouvrez l'onglet **[PORTS]** et rendez le port **8080** public pour accéder à l'application depuis votre navigateur.
 
-### 🛠️ Commandes Makefile disponibles
+### Commandes Makefile disponibles
 
 | Commande | Description |
 |----------|-------------|
@@ -193,21 +193,21 @@ Dans GitHub Codespace, ouvrez l'onglet **[PORTS]** et rendez le port **8080** pu
 | `make stop-forward` | Arrête le port-forward |
 | `make clean` | Nettoie tout |
 
-### 🔧 Configuration Packer
+### Configuration Packer
 
 Le fichier `packer/nginx.pkr.hcl` utilise le builder Docker pour :
 - Partir de l'image `nginx:alpine`
 - Copier `index.html` dans `/usr/share/nginx/html/`
 - Tagger l'image comme `nginx-custom:latest`
 
-### 📦 Playbook Ansible
+### Playbook Ansible
 
 Le fichier `ansible/playbook.yml` utilise la collection `kubernetes.core` pour :
 - Créer un Deployment Kubernetes avec 2 replicas
 - Créer un Service NodePort exposant le port 80
 - L'option `imagePullPolicy: Never` permet d'utiliser l'image locale importée
 
-### 🔍 Vérification du déploiement
+### Vérification du déploiement
 
 ```bash
 # Vérifier les pods
@@ -220,7 +220,7 @@ kubectl get svc
 kubectl logs -l app=nginx-custom
 ```
 
-### 🧹 Nettoyage
+### Nettoyage
 
 Pour supprimer l'ensemble du déploiement :
 ```bash
