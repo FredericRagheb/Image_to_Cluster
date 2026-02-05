@@ -1,0 +1,68 @@
+---
+- name: Déploiement de l'application Nginx sur K3d
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    app_name: nginx-custom
+    app_namespace: default
+    app_image: nginx-custom:latest
+    app_port: 80
+    service_port: 80
+    replicas: 2
+
+  tasks:
+    - name: Créer le Deployment Kubernetes
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: "{{ app_name }}"
+            namespace: "{{ app_namespace }}"
+            labels:
+              app: "{{ app_name }}"
+          spec:
+            replicas: "{{ replicas }}"
+            selector:
+              matchLabels:
+                app: "{{ app_name }}"
+            template:
+              metadata:
+                labels:
+                  app: "{{ app_name }}"
+              spec:
+                containers:
+                  - name: "{{ app_name }}"
+                    image: "{{ app_image }}"
+                    imagePullPolicy: Never
+                    ports:
+                      - containerPort: "{{ app_port }}"
+
+    - name: Créer le Service Kubernetes
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: "{{ app_name }}"
+            namespace: "{{ app_namespace }}"
+          spec:
+            type: NodePort
+            selector:
+              app: "{{ app_name }}"
+            ports:
+              - protocol: TCP
+                port: "{{ service_port }}"
+                targetPort: "{{ app_port }}"
+
+    - name: Afficher les informations du déploiement
+      debug:
+        msg: |
+          ✅ Déploiement terminé !
+          Application: {{ app_name }}
+          Replicas: {{ replicas }}
+          Port: {{ service_port }}
